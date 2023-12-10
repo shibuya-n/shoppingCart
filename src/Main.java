@@ -17,7 +17,7 @@ public class Main {
             String[] cartContents = new String[count];
 
             System.out.println("Current Shopping Cart:");
-            for(int i = 0; i < count; i++){
+            for (int i = 0; i < count; i++){
 
                 cartContents[i] = shoppingCart[i].getName();
             }
@@ -26,7 +26,8 @@ public class Main {
             System.out.println("What do you want to do?");
             System.out.println("1. Add items");
             System.out.println("2. Remove items");
-            System.out.println("3. Get item total");
+            System.out.println("3. Inspect item");
+            System.out.println("4. Get item total");
             System.out.println("ENTER ANYTHING TO QUIT");
 
             String response = getInput();
@@ -35,9 +36,25 @@ public class Main {
                 addItems();
             }
             else if (response.equals("2")){
-                removeItems();
+                if (count == 0){
+                    System.out.println("No items yet! Please add something to your cart");
+                } else {
+                    removeItems();
+                }
+
             }
             else if (response.equals("3")){
+
+
+                if (count == 0){
+                    System.out.println("No items yet! Please add something to your cart");
+                } else {
+                    inspectItem();
+                }
+
+
+            }
+            else if (response.equals("4")){
 
 
                 System.out.println("Total = $" + itemTotal());
@@ -59,23 +76,72 @@ public class Main {
         System.out.println("How much does this item cost?");
         double itemCost = Double.parseDouble(getInput());
 
-        for (int i = 0; i < count; i++) {
-            Item x = shoppingCart[i];
-            if ((itemName.equals(x.getName())) && (itemCost == x.getPrice())) {
-                shoppingCart[i].quantity += itemCount;
+        if (count == 0){
+            shoppingCart[count] = new Item(itemName, itemCost, itemCount);
+            count++;
+        } else {
+            for (int i = 0; i < count; i++) {
+                Item x = shoppingCart[i];
+                if ((itemName.equals(x.getName())) && (itemCost == x.getPrice())) {
+                    shoppingCart[i].quantity += itemCount;
+                } else {
+                    shoppingCart[count] = new Item(itemName, itemCost, itemCount);
+                    count++;
+
+                }
                 break;
-            }
-            else {
-                shoppingCart[count] = new Item(itemName, itemCost, itemCount);
-                count++;
+
 
             }
-
-
         }
     }
 
     public static void removeItems(){
+        System.out.println("Which item would you like to remove?");
+        String select = getInput();
+        Item[] temp = new Item[count];
+        int tempInt = 0;
+
+        // looks for item that matches
+        for (int i = 0; i < count; i++) {
+            Item x = shoppingCart[i];
+            if (select.equals(x.getName())){
+                tempInt = i;
+            }
+        }
+
+        // remove the said item
+        int k = 0; // tells pc which space to put it in - needs its own int because i will be one larger than our new array
+        for (int i = 0; i < count; i++){
+            if (!(i == tempInt)){
+                temp[k] = shoppingCart[i];
+                k++;
+            }
+        }
+        count--;
+        shoppingCart = temp;
+    }
+
+    public static void inspectItem(){
+        System.out.println("Which item would you like to inspect?");
+        String select = getInput();
+        boolean found = false;
+        for (int i = 0; i < count; i++){
+            Item x = shoppingCart[i];
+            if (select.equals(x.getName())){
+                System.out.println("Item = " + x.getName());
+                System.out.println("Cost = $" + x.getPrice());
+                System.out.println("Quantity = " + x.getQuantity());
+                System.out.println();
+
+                found = true;
+            }
+        }
+        if (!found){
+            System.out.println("No matches found!");
+            System.out.println();
+
+        }
 
     }
     public static double itemTotal(){
