@@ -129,6 +129,7 @@ public class Main {
         for (int i = 0; i < count; i++){
             Item x = shoppingCart[i];
             if (select.equals(x.getName())){
+                System.out.println("Match #" + (i+1));
                 System.out.println("Item = " + x.getName());
                 System.out.println("Cost = $" + x.getPrice());
                 System.out.println("Quantity = " + x.getQuantity());
